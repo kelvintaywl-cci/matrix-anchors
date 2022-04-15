@@ -1,0 +1,40 @@
+version: 2.1
+
+filters:
+  build-filter: &build-filter
+    filters:
+      tags:
+        only: /^.*/
+      branches:
+        only: /^.*/
+
+executors:
+  base:
+    docker:
+      - image: cimg/base:stable
+
+jobs:
+  build:
+    executor: base
+    resource_class: small
+    parameters:
+      process:
+        type: string
+    steps:
+      - run:
+          name: Build <<parameters.process>> image
+          command: |
+            echo "TODO build <<parameters.process>>"
+workflows:
+  build:
+    jobs:
+      - build:
+          context:
+            - test-4
+            - test-3
+          matrix:
+            parameters:
+              process:
+                - foobar
+                - fizzbuzz
+          <<: *build-filter
